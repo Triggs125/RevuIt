@@ -1,0 +1,1 @@
+export const getRevuIdSelector = (state) => (state.routes[state.index].params as any)?.revuId ?? -1;

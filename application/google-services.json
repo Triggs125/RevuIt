@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "796912386435",
+    "project_id": "dabble-revu-it",
+    "storage_bucket": "dabble-revu-it.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796912386435:android:962def2957240ce08df6b6",
+        "android_client_info": {
+          "package_name": "app.dabbletech.revu_it"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_uehC0EErQv4svtwFhGgy3jkSgUjksEU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

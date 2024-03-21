@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "Revu It",
+    "slug": "revu-it",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#232526"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "buildNumber": "0",
+      "bundleIdentifier": "app.dabbletech.revu-it",
+      "supportsTablet": true
+    },
+    "android": {
+      "versionCode": 0,
+      "package": "app.dabbletech.foodgroups",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#365F7F"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "67c2b833-9f8f-4ec1-b7b0-30f67f570535"
+      }
+    },
+    "owner": "driggtan",
+    "plugins": [
+      "expo-localization"
+    ]
+  }
+}
