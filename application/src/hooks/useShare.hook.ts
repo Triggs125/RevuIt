@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 const useShare = () => {
-  const handleShare = useCallback((revuId: string) => {
+  const handleShare = useCallback((revuId?: string) => {
     console.log('Share Pressed:', revuId)
   }, []);
 

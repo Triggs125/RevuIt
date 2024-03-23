@@ -1,18 +1,19 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Image, ScrollView, View } from "react-native";
 import { useGetRevu } from '../../hooks/useGetRevu.hook';
-import { Divider } from 'react-native-paper';
+import { ActivityIndicator, Divider } from 'react-native-paper';
 import { RevuHeader } from './revu-header';
 import { useTheme } from '../../../utils/theme';
 import { Labels } from '../../components/labels/labels';
 import { EditableText } from '../../components/editable-text';
 import { RevuItems } from './revu-items';
 import { useTranslation } from 'react-i18next';
+import { Error } from '../../components/error';
 
 const RevuPage = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const { revu } = useGetRevu();
+  const { revu, isFetching, isError } = useGetRevu();
 
   const handleNameChange = useCallback((text: string) => {
     console.log('Name change:', text)
@@ -20,6 +21,16 @@ const RevuPage = () => {
   const handleDescriptionChange = useCallback((text: string) => {
     console.log('Description change:', text)
   }, []);
+
+  if (isFetching) {
+    return (
+      <ActivityIndicator size="large" />
+    )
+  }
+
+  if (isError || !revu) {
+    return <Error />
+  }
 
   return (
     <View
@@ -46,7 +57,7 @@ const RevuPage = () => {
             paddingHorizontal: theme.spacing(2)
           }}
         >
-          {revu.imageUrl ? (
+          {revu?.imageUrl ? (
             <Image
               source={{ uri: revu.imageUrl }}
               style={{
@@ -66,7 +77,7 @@ const RevuPage = () => {
             }}
           >
             <EditableText
-              value={revu.name}
+              value={revu?.name}
               placeholder={t('revu-name')}
               onChangeText={handleNameChange}
               size='large'
@@ -76,7 +87,7 @@ const RevuPage = () => {
               }}
             />
             <EditableText
-              value={revu.description}
+              value={revu?.description}
               placeholder={t('revu-description')}
               onChangeText={handleDescriptionChange}
               color={theme.colors.gray.dark}

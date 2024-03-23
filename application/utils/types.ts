@@ -1,9 +1,16 @@
+import { DocumentReference, Timestamp } from "firebase/firestore";
+
 type Created = {
-  createdAt: string;
-  createdBy: string;
+  createdAt: Date;
+  createdBy: DocumentReference;
 }
 
-export type Revu = Created & {
+type Updated = {
+  updatedAt: Date;
+  updatedBy: DocumentReference;
+}
+
+export type Revu = Created & Partial<Updated> & {
   revuId: string;
   pinned?: boolean;
   name: string;
@@ -12,6 +19,11 @@ export type Revu = Created & {
   imageUrl?: string;
   color?: string;
   order: number;
+}
+
+export type RevuResponse = Revu & {
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
 export type RevuItem = Created & {

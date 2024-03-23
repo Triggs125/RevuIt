@@ -41,9 +41,8 @@ const RevuCards = ({ revus, header }: RevuCardsProps) => {
         onDragEnd={({ data }) => setOrderedRevus(data)}
         renderItem={({ item: revu, drag }) => {
           return (
-            <ScaleDecorator>
+            <ScaleDecorator key={`revu-card-${revu.revuId}`}>
               <RevuCard
-                key={`revu-card-${revu.revuId}`}
                 revu={revu}
                 onLongPress={drag}
               />

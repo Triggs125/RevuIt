@@ -1,16 +1,18 @@
-import { useNavigationState } from '@react-navigation/native';
+import { ParamListBase, useFocusEffect, useNavigationState } from '@react-navigation/native';
 import { getRevuIdSelector } from '../../utils/selectors';
-import { useMemo } from 'react';
-import { useGetRevus } from './useGetRevus.hook';
+import { getRevuUnsubscribe, useGetRevuQuery } from '../redux/revus.api.slice';
+import { useCallback } from 'react';
 
-const useGetRevu = () => {
-  const revuId = useNavigationState(getRevuIdSelector);
-  const { revus } = useGetRevus();
+const useGetRevu = (id?: number) => {
+  const revuId = useNavigationState<ParamListBase, number>(getRevuIdSelector);
 
-  // TODO: Create a snapshot selector to get the revu
-  const revu = useMemo(() => revus.find(revu => revu.revuId === revuId) ?? revus[0], [revuId]);
-  
-  return { revu };
+  const { data: revu, isFetching, isError } = useGetRevuQuery(id?.toString() ?? revuId.toString());
+
+  useFocusEffect(useCallback(() => {
+    return getRevuUnsubscribe?.();
+  }, []));
+
+  return { revu, isFetching, isError };
 }
 
 export { useGetRevu };

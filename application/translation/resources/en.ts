@@ -8,6 +8,7 @@ export default {
   'others': 'Others',
   'share': 'Share',
   'add': 'Add',
+  'error': 'Uh oh. An error has occurred.',
 
   // Revu
   'revu-name': 'Revu Name',

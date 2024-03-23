@@ -20,22 +20,17 @@ const AddLabel = ({ labels }: AddLabelProps) => {
   }, []);
 
   const button = (
-    <Button
+    <IconButton
       icon='plus'
       onPress={() => setEdit(true)}
+      size={18}
       style={{
         borderWidth: 1,
         borderColor: theme.colors.gray.light,
         borderRadius: 50,
         margin: 0
       }}
-      labelStyle={{
-        color: theme.colors.gray.dark,
-        marginVertical: theme.spacing(0.8)
-      }}
-    >
-      {t('revu-item-add-label')}
-    </Button>
+    />
   );
 
   const textInput = (

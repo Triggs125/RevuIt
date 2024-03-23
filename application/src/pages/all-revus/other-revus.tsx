@@ -1,13 +1,17 @@
-import { useGetRevus } from "../../hooks/useGetRevus.hook";
 import { useTranslation } from "react-i18next";
 import { RevuCards } from "./revu-cards";
+import { Revu } from "../../../utils/types";
 
-const OtherRevus = () => {
+type OtherRevusProps = {
+  otherRevus?: Revu[];
+  pinnedRevus?: Revu[];
+}
+
+const OtherRevus = ({ otherRevus, pinnedRevus }: OtherRevusProps) => {
   const { t } = useTranslation();
-  const { pinnedRevus, otherRevus } = useGetRevus();
 
-  return otherRevus?.length > 0 ? (
-    <RevuCards revus={otherRevus} header={pinnedRevus?.length > 0 ? t('others') : null} />
+  return otherRevus && otherRevus.length > 0 ? (
+    <RevuCards revus={otherRevus} header={(pinnedRevus ?? []).length > 0 ? t('others') : undefined} />
   ) : null;
 }
 

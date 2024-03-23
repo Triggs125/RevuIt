@@ -27,7 +27,7 @@ const RevuHeader = () => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingTop: top,
-        backgroundColor: revu.color ?? theme.colors.background
+        backgroundColor: revu?.color ?? theme.colors.background
       }}
     >
       <BackButton />
@@ -41,19 +41,19 @@ const RevuHeader = () => {
           icon='account-multiple'
           iconColor={theme.colors.light}
           size={ICON_SIZE}
-          onPress={() => handleShare(revu.revuId)}
+          onPress={() => handleShare(revu?.revuId)}
         />
         <IconButton
           icon='share'
           iconColor={theme.colors.light}
           size={ICON_SIZE}
-          onPress={() => handleShare(revu.revuId)}
+          onPress={() => handleShare(revu?.revuId)}
         />
         <IconButton
           icon='dots-horizontal-circle-outline'
           iconColor={theme.colors.light}
           size={ICON_SIZE}
-          onPress={() => handleShare(revu.revuId)}
+          onPress={() => handleShare(revu?.revuId)}
         />
       </View>
     </Surface>
