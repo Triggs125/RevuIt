@@ -1,1 +1,3 @@
-export const getRevuIdSelector = (state: any): number => (state.routes[state.index].params as any)?.revuId ?? -1;
+export const getGroupIdSelector = (state: any): string => {
+  return (state.routes[state.index].params as any)?.groupId ?? '-1';
+}

@@ -10,7 +10,7 @@ type RatingProps = {
   style?: Style;
 }
 
-const Rating = ({ rating, size = 'small', style }: RatingProps) => {
+const Rating = ({ rating = 0, size = 'small', style }: RatingProps) => {
   const { theme } = useTheme();
 
   const colorScale = useMemo(() => {

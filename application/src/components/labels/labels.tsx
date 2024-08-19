@@ -3,13 +3,12 @@ import { Label } from "./label"
 import { useTheme } from "../../../utils/theme";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGetDimensions } from "../../hooks/useGetDimensions.hook";
-import { Revu } from "../../../utils/types";
-import { IconButton, Text } from "react-native-paper";
-import { useGetScreenDimensions } from "../../hooks/useGetScreenDimensions.hook";
+import { Return, Revu } from "../../../utils/types";
+import { Text } from "react-native-paper";
 import { AddLabel } from "./add-label";
 
 type LabelsProps = {
-  revu: Revu;
+  revu: Return<Revu>;
   startPosition?: number;
   hasOverflow?: boolean;
   editable?: boolean;
@@ -18,10 +17,10 @@ type LabelsProps = {
 const Labels = ({ revu, startPosition = 0, hasOverflow = true, editable = false }: LabelsProps) => {
   const { theme } = useTheme();
 
-  const scrolLRef = useRef();
-  const viewRef = useRef();
-  const { pageX: scrollX } = useGetDimensions(scrolLRef);
-  const { pageX: viewX } = useGetDimensions(viewRef);
+  const scrollRef = useRef(null);
+  const viewRef = useRef(null);
+  const { pageX: scrollX = 0 } = useGetDimensions(scrollRef);
+  const { pageX: viewX = 0 } = useGetDimensions(viewRef);
   const [scrollWidth, setScrollWidth] = useState(0);
   const [viewWidth, setViewWidth] = useState(0);
 
@@ -46,7 +45,7 @@ const Labels = ({ revu, startPosition = 0, hasOverflow = true, editable = false 
 
   return (
     <ScrollView
-      ref={scrolLRef}
+      ref={scrollRef}
       horizontal
       showsHorizontalScrollIndicator={false}
       onLayout={(event) => {

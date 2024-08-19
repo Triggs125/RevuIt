@@ -1,15 +1,19 @@
 import { Button, Icon, Menu, MenuProps, Text } from "react-native-paper";
-import { RevuItemRating } from "../../../utils/types";
+import { Rating, Revu } from "../../../utils/types";
 import { useTheme } from "../../../utils/theme";
 import { useTranslation } from "react-i18next";
 import { View, ViewProps } from "react-native";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { useChangeFeelingMutation } from "../../redux/edit-revu.api.slice";
 
 type RevuItRatingMenuProps = Omit<MenuProps, 'anchorPosition' | 'children' | 'theme'> & {
-  revuItemRating?: RevuItemRating;
+  rating?: Rating;
+  revu: Revu;
 };
 
 const RevuItRatingMenu = (props: RevuItRatingMenuProps) => {
+  const { rating, revu } = props;
+
   const { theme } = useTheme();
   const { t } = useTranslation();
 
@@ -26,6 +30,12 @@ const RevuItRatingMenu = (props: RevuItRatingMenuProps) => {
     }
   }), []);
 
+  const [changeFeeling] = useChangeFeelingMutation();
+
+  const handleChangeFeeling = useCallback((feeling: Rating['feeling']) => {
+    changeFeeling({ rating, revu, feeling });
+  }, [rating, revu, changeFeeling]);
+
   return (
     <Menu
       {...props}
@@ -33,7 +43,7 @@ const RevuItRatingMenu = (props: RevuItRatingMenuProps) => {
       contentStyle={[
         {
           flexDirection: 'row',
-          backgroundColor: theme.colors.background,
+          backgroundColor: theme.colors.gray.light,
           gap: theme.spacing(0.5),
           paddingHorizontal: theme.spacing()
         },
@@ -41,10 +51,11 @@ const RevuItRatingMenu = (props: RevuItRatingMenuProps) => {
       ]}
     >
       <Button
+        onPress={() => handleChangeFeeling(null)}
         style={[
           styles.buttonContent,
           {
-            backgroundColor: !props.revuItemRating?.feeling ? theme.colors.rated : undefined
+            backgroundColor: !rating?.feeling ? theme.colors.rated : undefined
           }
         ]}
       >
@@ -54,10 +65,11 @@ const RevuItRatingMenu = (props: RevuItRatingMenuProps) => {
         </View>
       </Button>
       <Button
+        onPress={() => handleChangeFeeling('DISLIKE')}
         style={[
           styles.buttonContent,
           {
-            backgroundColor: props.revuItemRating?.feeling === 'DISLIKE' ? theme.colors.rated : undefined
+            backgroundColor: rating?.feeling === 'DISLIKE' ? theme.colors.rated : undefined
           }
         ]}
       >
@@ -67,10 +79,11 @@ const RevuItRatingMenu = (props: RevuItRatingMenuProps) => {
         </View>
       </Button>
       <Button
+        onPress={() => handleChangeFeeling('MEH')}
         style={[
           styles.buttonContent,
           {
-            backgroundColor: props.revuItemRating?.feeling === 'MEH' ? theme.colors.rated : undefined
+            backgroundColor: rating?.feeling === 'MEH' ? theme.colors.rated : undefined
           }
         ]}
       >
@@ -80,10 +93,11 @@ const RevuItRatingMenu = (props: RevuItRatingMenuProps) => {
         </View>
       </Button>
       <Button
+        onPress={() => handleChangeFeeling('LIKE')}
         style={[
           styles.buttonContent,
           {
-            backgroundColor: props.revuItemRating?.feeling === 'LIKE' ? theme.colors.rated : undefined
+            backgroundColor: rating?.feeling === 'LIKE' ? theme.colors.rated : undefined
           }
         ]}
       >
@@ -93,10 +107,11 @@ const RevuItRatingMenu = (props: RevuItRatingMenuProps) => {
         </View>
       </Button>
       <Button
+        onPress={() => handleChangeFeeling('LOVE')}
         style={[
           styles.buttonContent,
           {
-            backgroundColor: props.revuItemRating?.feeling === 'LOVE' ? theme.colors.rated : undefined
+            backgroundColor: rating?.feeling === 'LOVE' ? theme.colors.rated : undefined
           }
         ]}
       >

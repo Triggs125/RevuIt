@@ -4,19 +4,15 @@ import { useTheme } from "../../utils/theme";
 import { Avatar, Text } from "react-native-paper";
 import { Style } from "react-native-paper/lib/typescript/components/List/utils";
 import { LayoutChangeEvent, View } from "react-native";
-import { Revu, RevuItem, RevuItemRating } from "../../utils/types";
 
 type RatingSliderProps = {
-  revu: Revu;
-  revuItem: RevuItem;
+  rating: number;
+  numberOfRatings: number;
   style?: Style;
 }
 
-const RatingSlider = ({ revu, revuItem, style }: RatingSliderProps) => {
+const RatingSlider = ({ rating, numberOfRatings, style }: RatingSliderProps) => {
   const { theme } = useTheme();
-
-  const rating = 7.5;
-  const numberOfRatings = 10;
 
   const [width, setWidth] = useState(0);
   const onLayout = useCallback((event: LayoutChangeEvent) => {
@@ -25,7 +21,7 @@ const RatingSlider = ({ revu, revuItem, style }: RatingSliderProps) => {
   }, []);
 
   const ratingPosition = useMemo(() => {
-    return (width / 10 * rating) + theme.spacing(1.5);
+    return width / 10 * rating;
   }, [width, rating]);
 
   const colorScale = useMemo(() => {

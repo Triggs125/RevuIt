@@ -1,11 +1,19 @@
-import { useMemo } from "react";
-import { mockRevuItems } from "../../mocks/mockRevuItems";
-import { Revu } from "../../utils/types";
+import { useCallback } from "react";
+import { Return, Revu } from "../../utils/types";
+import { useFocusEffect } from "@react-navigation/native";
+import { getRevuItemsUnsubscribe, useLazyGetRevuItemsQuery } from "../redux/revu.api.slice";
 
-const useGetRevuItems = (revu: Revu) => {
-  const revuItems = useMemo(() => mockRevuItems, [mockRevuItems]);
+const useGetRevuItems = (revu?: Return<Revu>) => {
+  const [getRevuItems, { data: revuItems, isFetching, isError }] = useLazyGetRevuItemsQuery();
 
-  return { revuItems };
+  useFocusEffect(useCallback(() => {
+    if (!revu) return;
+
+    getRevuItems(revu.revuId);
+    return getRevuItemsUnsubscribe?.();
+  }, [revu?.revuId]));
+
+  return { revuItems, isFetching, isError };
 }
 
 export { useGetRevuItems };

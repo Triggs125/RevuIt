@@ -6,13 +6,14 @@ import { useTranslation } from "react-i18next";
 import { useGetScreenDimensions } from "../hooks/useGetScreenDimensions.hook";
 
 type ColorChangerMenuProps = {
+  onChange: (color: string) => void;
+  color?: string;
   showText?: boolean;
   size?: number;
 }
 
-const ColorChangerModal = ({ showText, size = 32 }: ColorChangerMenuProps) => {
+const ColorChangerModal = ({ onChange, color, showText, size = 32 }: ColorChangerMenuProps) => {
   const { theme } = useTheme();
-  const { t } = useTranslation();
   const { width } = useGetScreenDimensions();
 
   const colorWidth = useMemo(() => {
@@ -27,14 +28,18 @@ const ColorChangerModal = ({ showText, size = 32 }: ColorChangerMenuProps) => {
   const [open, setOpen] = useState(false);
 
   const handleChangeColor = useCallback((color: string) => {
-    console.log('Change color:', color);
+    onChange(color);
     setOpen(false);
   }, [])
 
-  const anchor = useMemo(() => showText ? (
-    <Menu.Item
-      leadingIcon={'palette'}
-      title={t('change-color')}
+  const anchor = useMemo(() => color ? (
+    <IconButton
+      icon="pencil"
+      size={size}
+      iconColor={theme.colors.text}
+      style={{
+        backgroundColor: color
+      }}
       onPress={() => setOpen(true)}
     />
   ) : (
@@ -44,7 +49,7 @@ const ColorChangerModal = ({ showText, size = 32 }: ColorChangerMenuProps) => {
       iconColor={theme.colors.light}
       onPress={() => setOpen(true)}
     />
-  ), [showText, size])
+  ), [showText, size, color])
 
   return (
     <View>

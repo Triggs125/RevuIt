@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { Revu } from "../../../utils/types";
 
 type LabelProps = {
-  label: Revu['labels'][0];
+  label: NonNullable<Revu['labels']>[0];
   editable?: boolean;
 }
 
@@ -29,7 +29,7 @@ const Label = ({ label, editable }: LabelProps) => {
         color: theme.colors.text
       }}
     >
-      {label}
+      {label.label}
     </Chip>
   );
 }

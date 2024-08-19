@@ -1,25 +1,34 @@
 import { View } from "react-native";
-import { TextField } from "../../components/text-field";
-import { RevuItem } from "../../../utils/types";
+import { TextField } from "../text-field";
 import { useGetComments } from "../../hooks/useGetComments.hook";
 import { useState } from "react";
-import { ActivityIndicator, Button, Icon, List } from "react-native-paper";
+import { ActivityIndicator, Button, Icon, List, Text } from "react-native-paper";
 import { useTheme } from "../../../utils/theme";
 import { useTranslation } from "react-i18next";
 import { Comment } from "./comment";
+import { Error } from "../error";
+import { Revu } from "../../../utils/types";
 
 type CommentsProps = {
-  revuItem: RevuItem;
+  revu: Revu;
 }
 
-const Comments = ({ revuItem }: CommentsProps) => {
+const Comments = ({ revu }: CommentsProps) => {
   const { theme } = useTheme();
   const { t } = useTranslation();
 
-  const { comments } = useGetComments(revuItem);
+  const { comments, isFetching, isError } = useGetComments(revu);
 
   const [input, setInput] = useState('');
   const [commentsOpen, setCommentsOpen] = useState(false);
+
+  if (isFetching) {
+    return <ActivityIndicator />
+  }
+
+  if (isError || !comments) {
+    return <Error />
+  }
 
   return (
     <View
@@ -40,9 +49,12 @@ const Comments = ({ revuItem }: CommentsProps) => {
           value={input}
           onChangeText={setInput}
           placeholder={t('describe-rating')}
-          textFieldStyle={{
-            flexGrow: 1
-          }}
+          multiline
+          returnKeyType="done"
+          // style={{
+          //   flexGrow: 1,
+          //   flexShrink: 1
+          // }}
         />
         <Button
           onPress={() => setCommentsOpen(!commentsOpen)}
@@ -60,17 +72,24 @@ const Comments = ({ revuItem }: CommentsProps) => {
       >
         <View
           style={{
-            padding: theme.spacing(),
-            gap: theme.spacing(2),
-            paddingHorizontal: theme.spacing(1.5)
+            paddingVertical: theme.spacing(),
+            gap: theme.spacing(2)
           }}
         >
-          {comments ? (
+          {comments.length === 0 ? (
+            <Text
+              variant="bodyLarge"
+              style={{
+                textAlign: 'center',
+                color: theme.colors.gray.main
+              }}
+            >
+              {t('no-comments')}
+            </Text>
+          ) : (
             comments.map((comment, index) => (
               <Comment key={`${comment.commentId}-${index}`} comment={comment} />
             ))
-          ) : (
-            <ActivityIndicator />
           )}
         </View>
       </List.Accordion>

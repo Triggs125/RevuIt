@@ -2,17 +2,30 @@ export default {
   // Common
   'app-name': 'Revu It',
   'search-revus': 'Search Revus',
-  'add-revu-item': 'Add Revu Item',
-  'add-revu': 'Add Revu',
+  'add-revu-item': 'Add Item',
+  'add-revu': 'Add Group',
   'pinned': 'Pinned',
   'others': 'Others',
   'share': 'Share',
   'add': 'Add',
   'error': 'Uh oh. An error has occurred.',
+  'name': 'Name',
+  'description': 'Description',
+  'save-error': 'There was an issue saving. Please try again later.',
 
+  // Group
+  'group-save': 'Save Group',
+  'group-save-name-error': 'Enter a name for this group',
+  'group-edit': 'Edit Group',
+  'group-create': 'Create Group',
+  
   // Revu
   'revu-name': 'Revu Name',
   'revu-description': 'Revu Description',
+  'revu-create': 'Create Revu',
+  'revu-edit': 'Edit Revu',
+  'revu-linked-groups': 'Linked Groups',
+  'revu-save-name-error': 'Enter a name for this group',
 
   // Revu Options
   'delete-revu': 'Delete',
@@ -24,9 +37,11 @@ export default {
   'revu-item-name': 'Item Name',
   'revu-item-desription': 'Item Description',
   'revu-item-add-label': 'Label',
+  'new-revu-item-name': 'Revu Item',
 
   // Comments
   'describe-rating': 'Describe your rating',
+  'no-comments': 'Be the first to describe your rating!',
 
   // Ratings
   'none': 'None',

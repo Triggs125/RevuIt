@@ -7,11 +7,11 @@ type OtherRevusProps = {
   pinnedRevus?: Revu[];
 }
 
-const OtherRevus = ({ otherRevus, pinnedRevus }: OtherRevusProps) => {
+const OtherRevus = ({ otherRevus = [], pinnedRevus = [] }: OtherRevusProps) => {
   const { t } = useTranslation();
 
-  return otherRevus && otherRevus.length > 0 ? (
-    <RevuCards revus={otherRevus} header={(pinnedRevus ?? []).length > 0 ? t('others') : undefined} />
+  return otherRevus.length > 0 ? (
+    <RevuCards revus={otherRevus} header={pinnedRevus.length > 0 ? t('others') : undefined} />
   ) : null;
 }
 

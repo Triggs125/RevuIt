@@ -1,5 +1,5 @@
-import { Button, ButtonProps, Icon, Menu, Text, TextProps } from "react-native-paper"
-import { RatingFeelings, Revu, RevuItem, RevuItemRating } from "../../../utils/types";
+import { Button, Icon, Text, TextProps } from "react-native-paper"
+import { Revu, Rating } from "../../../utils/types";
 import { Style } from "react-native-paper/lib/typescript/components/List/utils";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../../../utils/theme";
@@ -9,8 +9,7 @@ import { RevuItRatingMenu } from "./revu-it-rating-menu";
 
 type RatingButtonProps = {
   revu: Revu;
-  revuItem: RevuItem;
-  revuItemRating?: RevuItemRating;
+  rating?: Rating;
   style?: Style;
 }
 
@@ -24,7 +23,7 @@ const TEXT_PROPS: Partial<TextProps<'headlineSmall'>> = {
   variant: 'titleLarge'
 };
 
-const RatingButton = ({ revu, revuItem, revuItemRating, style }: RatingButtonProps) => {
+const RatingButton = ({ revu, rating, style }: RatingButtonProps) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
 
@@ -32,12 +31,12 @@ const RatingButton = ({ revu, revuItem, revuItemRating, style }: RatingButtonPro
   const [visible, setVisisble] = useState(false);
 
   const contents = useMemo(() => {
-    switch (revuItemRating?.feeling) {
+    switch (rating?.feeling) {
       case 'DISLIKE': {
         return (
           <>
             <Icon source="thumb-down" size={ICON_SIZE} />
-            <Text {...TEXT_PROPS}>{t('dislike')}</Text>
+            {/* <Text {...TEXT_PROPS}>{t('dislike')}</Text> */}
           </>
         );
       }
@@ -45,7 +44,7 @@ const RatingButton = ({ revu, revuItem, revuItemRating, style }: RatingButtonPro
         return (
           <>
             <Icon source="thumbs-up-down" size={ICON_SIZE} />
-            <Text {...TEXT_PROPS}>{t('meh')}</Text>
+            {/* <Text {...TEXT_PROPS}>{t('meh')}</Text> */}
           </>
         );
       }
@@ -53,7 +52,7 @@ const RatingButton = ({ revu, revuItem, revuItemRating, style }: RatingButtonPro
         return (
           <>
             <Icon source="thumb-up" size={ICON_SIZE} />
-            <Text {...TEXT_PROPS}>{t('like')}</Text>
+            {/* <Text {...TEXT_PROPS}>{t('like')}</Text> */}
           </>
         );
       }
@@ -61,7 +60,7 @@ const RatingButton = ({ revu, revuItem, revuItemRating, style }: RatingButtonPro
         return (
           <>
             <Icon source="heart" size={ICON_SIZE} />
-            <Text {...TEXT_PROPS}>{t('love')}</Text>
+            {/* <Text {...TEXT_PROPS}>{t('love')}</Text> */}
           </>
         );
       }
@@ -69,26 +68,33 @@ const RatingButton = ({ revu, revuItem, revuItemRating, style }: RatingButtonPro
         return (
           <>
             <Icon source="thumb-up" size={ICON_SIZE} />
-            <Text {...TEXT_PROPS}>{t('app-name')}</Text>
+            {/* <Text {...TEXT_PROPS}>{t('app-name')}</Text> */}
           </>
         );
       }
     }
-  }, [revuItemRating?.feeling]);
+  }, [rating?.feeling]);
 
   return (
     <RevuItRatingMenu
       visible={visible}
-      revuItemRating={revuItemRating}
+      rating={rating}
+      revu={revu}
       onDismiss={() => setVisisble(false)}
       anchor={(
         <Button
           ref={buttonRef}
-          mode={!revuItemRating?.feeling ? "outlined" : "contained"}
+          mode={!rating?.feeling ? "outlined" : "contained"}
           onPress={() => setVisisble(v => !v)}
+          labelStyle={{
+            marginLeft: 0,
+            marginRight: 0,
+            marginTop: 4,
+            marginBottom: 0
+          }}
           style={{
-            backgroundColor: !revuItemRating?.feeling ? 'transparent' : theme.colors.rated,
-            borderRadius: theme.roundness,
+            backgroundColor: !rating?.feeling ? 'transparent' : theme.colors.rated,
+            borderWidth: 0,
             alignItems: 'center',
             justifyContent: 'center',
           }}
@@ -99,6 +105,7 @@ const RatingButton = ({ revu, revuItem, revuItemRating, style }: RatingButtonPro
               justifyContent: 'center',
               alignItems: 'center',
               gap: theme.spacing(),
+              padding: theme.spacing()
             }}
           >
             {contents}

@@ -1,45 +1,30 @@
 import React, { useCallback, useState } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
-import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { ScrollView, View } from 'react-native';
 import { Searchbar } from './search-bar/search-bar';
-import { PinnedRevus } from './pinned-revus';
-import { OtherRevus } from './other-revus';
 import { BottomActions } from '../../components/bottom-actions';
 import { useOnScroll } from '../../hooks/useOnScroll.hook';
 import { useTheme } from '../../../utils/theme';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import Animated from 'react-native-reanimated';
 import { useTranslation } from 'react-i18next';
-import { useGetRevus } from '../../hooks/useGetRevus.hook';
-import { ActivityIndicator, Text } from 'react-native-paper';
+import { ActivityIndicator, Portal, Text } from 'react-native-paper';
+import { useGetDashboardItems } from '../../hooks/useGetDashboardItems.hook';
+import { DashboardItems } from './dashboard-items';
 
-const RevusPage = () => {
+const DashboardPage = () => {
   const { t } = useTranslation();
   const { top } = useSafeAreaInsets();
   const { theme } = useTheme();
 
-  const { isFetching, isError, otherRevus, pinnedRevus } = useGetRevus();
+  const { groups, revus, isFetching, hasError } = useGetDashboardItems();
 
   const [height, setHeight] = useState(0);
   const [bottomHeight, setBottomHeight] = useState(0);
   const { isAtTop, onScroll, onBeginDrag, onEndDrag, searchBarStyle } = useOnScroll();
 
-  const onAddPress = useCallback(() => {
-    console.log('Add Revu Pressed');
-  }, []);
-  const onMapPress = useCallback(() => {
-    console.log('Add Map Pressed');
-  }, []);
-  const onMoviePress = useCallback(() => {
-    console.log('Add Movie Pressed');
-  }, []);
-  const onBarcodePress = useCallback(() => {
-    console.log('Add Barcode Pressed');
-  }, []);
-
   return (
-    <>
+    <Portal.Host>
       <StatusBar style={theme.dark ? 'light' : 'dark'} />
       <View style={{ flexGrow: 1 }}>
         <Animated.View
@@ -56,11 +41,36 @@ const RevusPage = () => {
         >
           <Searchbar />
         </Animated.View>
-        <NestableScrollContainer
+        <ScrollView
+          contentContainerStyle={{
+            paddingTop: height,
+            paddingBottom: bottomHeight + theme.spacing(4),
+            flex: 1
+          }}
+        >
+          {(isFetching || !groups || !revus) && (
+            <SafeAreaView
+              style={{
+                flex: 1,
+                justifyContent: 'space-between'
+              }}
+            >
+              <ActivityIndicator size="large" />
+            </SafeAreaView>
+          )}
+          {hasError && (
+            <Text>{t('error')}</Text>
+          )}
+          {!isFetching && !hasError && groups && revus && (
+            <DashboardItems groups={groups} revus={revus} />
+          )}
+        </ScrollView>
+        {/* <NestableScrollContainer
           onScroll={onScroll}
           onScrollBeginDrag={onBeginDrag}
           onScrollEndDrag={onEndDrag}
           scrollEventThrottle={10}
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingTop: height,
             paddingBottom: bottomHeight + theme.spacing(4)
@@ -78,20 +88,14 @@ const RevusPage = () => {
               <OtherRevus otherRevus={otherRevus} pinnedRevus={pinnedRevus} />
             </>
           ) : null}
-        </NestableScrollContainer>
+        </NestableScrollContainer> */}
         <BottomActions
           onLayout={(event) => setBottomHeight(event.nativeEvent.layout.height)}
           isExtended={isAtTop}
-          addButton={{ text: t('add-revu'), onPress: onAddPress }}
-          actionButtons={[
-            { icon: 'map-marker', onPress: onMapPress },
-            { icon: 'movie-open', onPress: onMoviePress },
-            { icon: 'barcode-scan', onPress: onBarcodePress },
-          ]}
         />
       </View>
-    </>
+    </Portal.Host>
   )
 }
 
-export { RevusPage };
+export { DashboardPage };

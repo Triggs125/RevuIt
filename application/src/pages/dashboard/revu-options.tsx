@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "../../../utils/theme";
 import { useShare } from "../../hooks/useShare.hook";
 import { ColorChangerModal } from "../../components/color-changer-modal";
+import { useChangePinnedMutation } from "../../redux/edit-revu.api.slice";
 
 type RevuOptionsProps = {
   revu: Revu;
@@ -15,6 +16,8 @@ const RevuOptions = ({ revu }: RevuOptionsProps) => {
   const { theme } = useTheme();
   const { handleShare } = useShare();
 
+  const [changePinned] = useChangePinnedMutation();
+
   const [isOpen, setIsOpen] = useState(false);
   const handlePress = useCallback(() => {
     setIsOpen(true);
@@ -23,7 +26,8 @@ const RevuOptions = ({ revu }: RevuOptionsProps) => {
 
   const handlePinPress = useCallback(() => {
     console.log(`${revu.pinned ? 'Unpinned' : 'Pinned'} Pressed`);
-  }, [revu.pinned]);
+    changePinned({ revu });
+  }, [revu]);
 
   const iconButton = (
     <IconButton
@@ -56,7 +60,7 @@ const RevuOptions = ({ revu }: RevuOptionsProps) => {
           title={t(revu.pinned === true ? 'unpin' : 'pin-to-top')}
           onPress={handlePinPress}
         />
-        <ColorChangerModal showText />
+        <ColorChangerModal revu={revu} showText />
       </Menu>
     </>
   )

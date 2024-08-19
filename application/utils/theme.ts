@@ -49,8 +49,8 @@ const useTheme = () => {
 
   const theme =
     colorScheme === 'dark'
-    ? { ...MD3DarkTheme, roundness: 8, colors: { ...MD3DarkTheme.colors, ...darkColors }, spacing, test }
-    : { ...MD3DarkTheme, roundness: 8, colors: { ...MD3DarkTheme.colors, ...darkColors }, spacing, test }
+    ? { ...MD3DarkTheme, roundness: 15, colors: { ...MD3DarkTheme.colors, ...darkColors }, spacing, test }
+    : { ...MD3DarkTheme, roundness: 15, colors: { ...MD3DarkTheme.colors, ...darkColors }, spacing, test }
 
   return { theme };
 }

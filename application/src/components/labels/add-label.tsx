@@ -3,9 +3,10 @@ import { useTheme } from "../../../utils/theme"
 import { useCallback, useState } from "react";
 import { EditableText } from "../editable-text";
 import { useTranslation } from "react-i18next";
+import { Revu } from "../../../utils/types";
 
 type AddLabelProps = {
-  labels?: string[];
+  labels?: Revu['labels'];
 }
 
 const AddLabel = ({ labels }: AddLabelProps) => {
