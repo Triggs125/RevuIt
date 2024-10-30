@@ -75,12 +75,12 @@ export const revuSnapshot = createApi({
       providesTags: ['Comments'],
       keepUnusedDataFor: 3600,
       queryFn: () => ({ data: [] }),
-      onCacheEntryAdded: async (revuItemId, { updateCachedData, cacheEntryRemoved }) => {
+      onCacheEntryAdded: async (revuId, { updateCachedData, cacheEntryRemoved }) => {
         getCommentsUnsubscribe = () => {
           console.log('Get Comments Sub')
           const unsub = onSnapshot(query(
             collection(firestore, 'comments'),
-            where('revuItemId', '==', revuItemId),
+            where('revuId', '==', revuId),
             orderBy('createdAt', 'asc')
           ), snapshot => {
             updateCachedData(() => {

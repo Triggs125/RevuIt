@@ -28,7 +28,7 @@ const RatingButton = ({ revu, rating, style }: RatingButtonProps) => {
   const { theme } = useTheme();
 
   const buttonRef = useRef<View>(null);
-  const [visible, setVisisble] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const contents = useMemo(() => {
     switch (rating?.feeling) {
@@ -80,12 +80,12 @@ const RatingButton = ({ revu, rating, style }: RatingButtonProps) => {
       visible={visible}
       rating={rating}
       revu={revu}
-      onDismiss={() => setVisisble(false)}
+      onDismiss={() => setVisible(false)}
       anchor={(
         <Button
           ref={buttonRef}
           mode={!rating?.feeling ? "outlined" : "contained"}
-          onPress={() => setVisisble(v => !v)}
+          onPress={() => setVisible(v => !v)}
           labelStyle={{
             marginLeft: 0,
             marginRight: 0,

@@ -3,7 +3,7 @@ import { Timestamp, collection, doc, setDoc, updateDoc } from 'firebase/firestor
 import { firestore } from '../../firebaseConfig';
 import { returnQuery } from '../../utils/api-helpers';
 import { getUserDoc } from '../../utils/firestore-helpers';
-import { Rating, Revu } from '../../utils/types';
+import { CommentType, Rating, Revu } from '../../utils/types';
 import { ApiResponse, SaveType } from '../../utils/api-types';
 
 export const editRevuSnapshot = createApi({
@@ -23,7 +23,7 @@ export const editRevuSnapshot = createApi({
         return returnQuery(updateDoc(doc(firestore, `revus/${newRevu.revuId}`), newRevu), newRevu.revuId);
       }
     }),
-    changeFeeling: builder.mutation<void, { rating?: Rating; revu: Revu; feeling: Rating['feeling'] }>({
+    changeFeeling: builder.mutation<null, { rating?: Rating; revu: Revu; feeling: Rating['feeling'] }>({
       queryFn: async ({ rating, revu, feeling }) => {
         if (!rating) {
           const newDoc = doc(collection(firestore, 'ratings'));
@@ -31,9 +31,10 @@ export const editRevuSnapshot = createApi({
             ratingId: newDoc.id,
             revuId: revu.revuId,
             feeling,
-            createdAt: Timestamp.now()
+            createdAt: Timestamp.now(),
+            createdBy: getUserDoc()
           }
-          return returnQuery(setDoc(newDoc, newRevuItemRating), undefined)
+          return returnQuery(setDoc(newDoc, newRevuItemRating), null)
         }
         return returnQuery(updateDoc(
           doc(firestore, `ratings/${rating.ratingId}`),
@@ -41,7 +42,7 @@ export const editRevuSnapshot = createApi({
             feeling,
             updatedAt: Timestamp.now()
           }
-        ), undefined)
+        ), null)
       }
     }),
     changeColor: builder.mutation<void, { revu: Revu; color: string; }>({
@@ -52,7 +53,19 @@ export const editRevuSnapshot = createApi({
         }), undefined)
       }
     }),
+    addComment: builder.query<null, { comment: Omit<CommentType, 'commentId' | 'createdAt'>; }>({
+      queryFn: async ({ comment }) => {
+        console.log('Add comment:', comment);
+        const newDoc = doc(collection(firestore, 'comments'));
+        const newComment: SaveType<ApiResponse<CommentType>> = {
+          ...comment as any,
+          commentId: newDoc.id,
+          createdAt: Timestamp.now()
+        }
+        return returnQuery(setDoc(newDoc, newComment), null);
+      }
+    })
   })
 });
 
-export const { useSaveRevuMutation, useChangeFeelingMutation, useChangeColorMutation } = editRevuSnapshot;
+export const { useSaveRevuMutation, useChangeFeelingMutation, useChangeColorMutation, useLazyAddCommentQuery } = editRevuSnapshot;

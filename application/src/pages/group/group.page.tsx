@@ -1,41 +1,24 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { ScrollView, View } from "react-native";
 import { useGetGroup } from '../../hooks/useGetGroup.hook';
-import { ActivityIndicator, Divider, Portal } from 'react-native-paper';
+import { ActivityIndicator, Divider } from 'react-native-paper';
 import { GroupHeader } from '../group/group-header';
 import { useTheme } from '../../../utils/theme';
-import { useTranslation } from 'react-i18next';
 import { Error } from '../../components/error';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BackButton } from '../../components/back-button';
-import { BottomActions } from '../../components/bottom-actions';
-import { useOnScroll } from '../../hooks/useOnScroll.hook';
 import { GroupItems } from './group-items';
 import { GroupInfo } from './group-info';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { getGroupIdSelector } from '../../../utils/selectors';
+import { BottomActions } from '../../components/bottom-actions';
 
 const GroupPage = () => {
-  const { t } = useTranslation();
   const { theme } = useTheme();
-  const navigation = useNavigation();
-  const groupId = getGroupIdSelector(navigation.getState());
-  // const { params } = useRoute();
-  // const groupId = (params as any)?.groupId as string | undefined;
+  const { getState, navigate } = useNavigation();
+
+  const groupId = getGroupIdSelector(getState());
   const { group, isFetching, isError } = useGetGroup(groupId);
-
-  // const [addRevuItem, { isLoading }] = useAddRevuItemMutation();
-
-  // const [height, setHeight] = useState(0);
-  const [bottomHeight, setBottomHeight] = useState(0);
-  const { isAtTop, onScroll, onBeginDrag, onEndDrag, searchBarStyle } = useOnScroll();
-
-  // const onMoviePress = useCallback(() => {
-  //   console.log('Add Movie Pressed');
-  // }, []);
-  // const onBarcodePress = useCallback(() => {
-  //   console.log('Add Barcode Pressed');
-  // }, []);
 
   if (isFetching) {
     return (
@@ -66,35 +49,30 @@ const GroupPage = () => {
   }
 
   return (
-    <Portal.Host>
-      <View
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background
+      }}
+    >
+      <GroupHeader group={group} />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         style={{
-          flex: 1,
-          backgroundColor: theme.colors.background
+          flex: 1
+        }}
+        contentContainerStyle={{
+          paddingVertical: theme.spacing(2),
+          gap: theme.spacing(2),
+          paddingBottom: theme.spacing(4)
         }}
       >
-        <GroupHeader group={group} />
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{
-            flex: 1
-          }}
-          contentContainerStyle={{
-            paddingVertical: theme.spacing(2),
-            gap: theme.spacing(2),
-            paddingBottom: bottomHeight + theme.spacing(4)
-          }}
-        >
-          <GroupInfo group={group} />
-          <Divider style={{ marginHorizontal: theme.spacing() }} />
-          <GroupItems group={group} />
-        </ScrollView>
-        <BottomActions
-          onLayout={(event) => setBottomHeight(event.nativeEvent.layout.height)}
-          isExtended={isAtTop}
-        />
-      </View>
-    </Portal.Host>
+        <GroupInfo group={group} />
+        <Divider style={{ marginHorizontal: theme.spacing() }} />
+        <GroupItems group={group} />
+      </ScrollView>
+      <BottomActions onPress={() => (navigate as any)('Create Revu', { groupId })} />
+    </View>
   );
 };
 

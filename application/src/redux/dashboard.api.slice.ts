@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { QueryConstraint, Unsubscribe, collection, doc, limit, onSnapshot, query, startAt, where, writeBatch } from 'firebase/firestore';
+import { QueryConstraint, Unsubscribe, collection, doc, endAt, limit, onSnapshot, orderBy, query, startAt, where, writeBatch } from 'firebase/firestore';
 import { firestore } from '../../firebaseConfig';
 import { Group, Revu } from '../../utils/types';
 import { transformTimestamps } from '../../utils/transforms';
@@ -17,10 +17,21 @@ export const dashboardSnapshot = createApi({
     getGroups: builder.query<Group[], string>({
       providesTags: ['Groups'],
       queryFn: () => ({ data: [] }),
-      onCacheEntryAdded: async (_, { updateCachedData, cacheEntryRemoved }) => {
+      onCacheEntryAdded: async (searchText, { updateCachedData, cacheEntryRemoved }) => {
         getGroupsUnsubscribe = () => {
-          console.log('Get Groups Sub')
-          const unsub = onSnapshot(query(collection(firestore, 'groups')), snapshot => {
+          console.log('Get Groups Sub');
+          const queryItems: QueryConstraint[] = [];
+          if (searchText) {
+            const searchTerm = searchText.toLowerCase();
+            const strlength = searchTerm.length;
+            const strFrontCode = searchTerm.slice(0, strlength - 1);
+            const strEndCode = searchTerm.slice(strlength - 1, searchTerm.length);
+            const endCode = strFrontCode + String.fromCharCode(strEndCode.charCodeAt(0) + 1);
+            console.log('searchText', searchTerm, endCode);
+            queryItems.push(where('name', '>=', searchTerm));
+            queryItems.push(where('name', '<', endCode));
+          }
+          const unsub = onSnapshot(query(collection(firestore, 'groups'), ...queryItems), snapshot => {
             updateCachedData(() => {
               return snapshot.docs.map(doc => transformTimestamps<Group>(doc.data(), doc.id));
             });

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { View } from "react-native"
 import { useTranslation } from "react-i18next";
 import { Revu } from "../../../utils/types";
@@ -10,6 +10,7 @@ import { useGetRevuRatings } from "../../hooks/useGetRevuRatings.hook";
 import { getRatingFromFeeling } from "../../../utils/transforms";
 import { RatingButton } from "./revu-it-button";
 import { Comments } from "../comments/comments";
+import { useSaveRevuMutation } from "../../redux/edit-revu.api.slice";
 
 type RevuCardProps = {
   revu: Revu;
@@ -20,6 +21,7 @@ const RevuCard = ({ revu }: RevuCardProps) => {
   const { t } = useTranslation();
 
   const { revuRatings, userRevuRating } = useGetRevuRatings(revu.revuId);
+  const [saveRevu] = useSaveRevuMutation();
 
   const ratings = useMemo(() => {
     return revuRatings?.filter(rating => rating.feeling);
@@ -36,6 +38,14 @@ const RevuCard = ({ revu }: RevuCardProps) => {
 
     return Math.round(rating / ratings.length * 10) / 10;
   }, [ratings]);
+
+  const handleNameChange = useCallback((text: string) => {
+    saveRevu({ revu: { ...revu, name: text } });
+  }, [revu, saveRevu]);
+
+  const handleDescriptionChange = useCallback((text: string) => {
+    saveRevu({ revu: { ...revu, description: text } });
+  }, [revu, saveRevu]);
 
   return (
     <View
@@ -73,6 +83,8 @@ const RevuCard = ({ revu }: RevuCardProps) => {
             <EditableText
               value={revu.name}
               placeholder={t('revu-item-name')}
+              onChangeText={handleNameChange}
+              returnKeyType="done"
               size="medium"
               multiline
               style={{
@@ -83,6 +95,8 @@ const RevuCard = ({ revu }: RevuCardProps) => {
             <EditableText
               value={revu.description}
               placeholder={t('revu-item-desription')}
+              onChangeText={handleDescriptionChange}
+              returnKeyType="done"
               size="medium"
               multiline
               style={{

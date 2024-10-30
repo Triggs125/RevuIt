@@ -14,9 +14,15 @@ export type EditableTextProps = Omit<TextInputProps, 'ref'> & {
 }
 
 const EditableText = ({
-  value, onChangeText = () => { }, size, color, style, filter,
+  value,
+  onChangeText = () => {},
+  size,
+  color,
+  style,
+  filter,
   label,
-  blurOnSubmit = true, autoCapitalize = 'sentences',
+  blurOnSubmit = true,
+  autoCapitalize = 'sentences',
   required = false,
   helpText,
   helpTextStyle = {},

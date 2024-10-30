@@ -20,16 +20,10 @@ const AddRevuPage = () => {
   const { params } = useRoute();
   const groupId = (params as { groupId: string | undefined })?.groupId;
 
-  const { group } = useGetGroup(groupId);
-  const [saveRevuMutation, { isLoading, isError, isSuccess, data }] = useSaveRevuMutation();
+  const [saveRevuMutation, { isLoading, isError }] = useSaveRevuMutation();
   
-  const [state, setState] = useState({ name: '', description: '', color: '' });
+  const [state, setState] = useState({ name: '', description: '', color: '', groupId });
   const { name, description, color } = state;
-  useEffect(() => {
-    if (group) {
-      setState(group as any);
-    }
-  }, [group])
   
   const [errors, setErrors] = useState({ name: false, description: false, color: false });
 
@@ -40,8 +34,8 @@ const AddRevuPage = () => {
 
     saveRevuMutation({ revu: state })
       .unwrap()
-      .then(id => {
-        (navigate as any)('Revu', { revuId: id || groupId });
+      .then(() => {
+        (navigate as any)('Group', { groupId });
       });
   }, [state, errors, groupId]);
 

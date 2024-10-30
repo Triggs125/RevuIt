@@ -11,7 +11,6 @@ const useGetRevuRatings = (revuId: string) => {
   }, []));
 
   const userRevuRating = useMemo(() => {
-    // TODO: Remove string to get the current logged in user
     return revuRatings?.find(rating => {
       return rating.createdBy === getUserDoc().path;
     })

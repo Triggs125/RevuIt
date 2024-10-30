@@ -1,4 +1,4 @@
-import { ActivityIndicator, List } from "react-native-paper";
+import { ActivityIndicator, Divider, List } from "react-native-paper";
 import { Group } from "../../../utils/types";
 // import { useTheme } from "../../../utils/theme";
 import { useKeyboardOffset } from "../../hooks/useKeyboardOffset.hook";
@@ -32,14 +32,11 @@ const GroupItems = ({ group }: GroupItemsProps) => {
         marginBottom: keyboardOffset
       }}
     >
-      {revus.map((revu) => {
+      {revus.map((revu, index) => {
         return (
           <>
             <RevuCard key={`${group.groupId}-${revu.revuId}`} revu={revu} />
-            <RevuCard key={`${group.groupId}-${revu.revuId}`} revu={revu} />
-            <RevuCard key={`${group.groupId}-${revu.revuId}`} revu={revu} />
-            <RevuCard key={`${group.groupId}-${revu.revuId}`} revu={revu} />
-            <RevuCard key={`${group.groupId}-${revu.revuId}`} revu={revu} />
+            {index !== revus.length - 1 ? <Divider /> : null}
           </>
         )
       })}

@@ -1,11 +1,11 @@
 type Created = {
   createdAt: string;
-  createdBy: string;
+  createdBy?: string;
 }
 
 type Updated = {
-  updatedAt: string;
-  updatedBy: string;
+  updatedAt?: string;
+  updatedBy?: string;
 }
 
 // The colors are stored in HEX format
@@ -39,6 +39,6 @@ export type RatingFeelings = null | 'DISLIKE'| 'MEH'| 'LIKE'| 'LOVE';
 
 export type CommentType = Created & {
   commentId: string;
-  revuItemId: string;
+  revuId: string;
   description: string;
 }
